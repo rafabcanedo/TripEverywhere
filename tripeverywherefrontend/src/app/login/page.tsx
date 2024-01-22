@@ -1,7 +1,52 @@
+'use client'
+import { Button } from '@/components/Button'
+import { Input } from '@/components/Input'
+import { useForm } from 'react-hook-form'
+import Link from 'next/link'
+
 export default function Login() {
+  const { register, handleSubmit } = useForm()
+
+  function handleCreateUser(data: any) {
+    console.log(data)
+  }
+
   return (
-    <main>
-      <h1 className="text-sm">Login</h1>
-    </main>
+    <div className="flex min-h-screen w-full flex-wrap items-center justify-center p-2">
+      <div className="w-[390px] bg-slate-200 shadow-md px-20 py-20">
+        <h3 className="text-subtitle text-2xl font-mont text-center my-7">
+          Login Page
+        </h3>
+        <form
+          onSubmit={handleSubmit(handleCreateUser)}
+          className="flex flex-col items-center gap-4"
+        >
+          <Input type="email" placeholder="Email" {...register('email')} />
+          <Input
+            type="password"
+            placeholder="Password"
+            {...register('password')}
+          />
+          <div className="flex flex-row justify-end mr-4">
+            <span className="text-subtitle">Dont have an account?</span>
+            <Link href="/register">
+              <p className="ml-2 text-primary">Register</p>
+            </Link>
+          </div>
+          <div className="flex items-center justify-center">
+            <Button size="lg" className="px-16">
+              Login
+            </Button>
+          </div>
+          <div className="flex items-center justify-center">
+            <Button className="bg-red-500 hover:bg-vouusar">
+              Continue with Google
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
   )
 }
+
+/* <div className="p-3 max-w-lg mx-auto"> */
