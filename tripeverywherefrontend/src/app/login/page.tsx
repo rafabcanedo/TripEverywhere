@@ -3,11 +3,22 @@ import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+const createUserSchema = z.object({
+  email: z.string().email('Formato de email invalido'),
+  password: z.string().min(6, 'O email precisa de no mínimo 6 caracteres'),
+})
+
+type CreateUserSchema = z.infer<typeof createUserSchema>
 
 export default function Login() {
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit } = useForm<CreateUserSchema>({
+    resolver: zodResolver(createUserSchema),
+  })
 
-  function handleCreateUser(data: any) {
+  function handleCreateUser(data: CreateUserSchema) {
     console.log(data)
   }
 
@@ -48,5 +59,3 @@ export default function Login() {
     </div>
   )
 }
-
-/* <div className="p-3 max-w-lg mx-auto"> */
