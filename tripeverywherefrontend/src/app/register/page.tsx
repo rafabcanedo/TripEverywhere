@@ -3,11 +3,14 @@ import * as React from 'react'
 import { useState } from 'react'
 import { Button } from '@/components/Button'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function Register() {
   const [formData, setFormData] = useState({})
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
+
+  const router = useRouter()
 
   const handleCreateUser = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -18,19 +21,34 @@ export default function Register() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
-    setLoading(true)
-    const response = await fetch('http://localhost:3333/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-    const data = await response.json()
-    console.log(data)
+
+    try {
+      setLoading(true)
+      const response = await fetch('http://localhost:3333/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+      const data = await response.json()
+
+      console.log(data)
+
+      if (data.success === false) {
+        setLoading(false)
+        setError(data.message)
+        return
+      }
+      setLoading(false)
+      setError(null)
+      router.push('/login')
+    } catch (error: any) {
+      setLoading(false)
+      setError(error.message)
+    }
   }
 
-  console.log(formData)
   return (
     <div className="flex min-h-screen w-full flex-wrap items-center justify-center p-2">
       <div className="w-[390px] bg-slate-200 shadow-md px-20 py-20">
@@ -69,10 +87,11 @@ export default function Register() {
             </Link>
           </div>
           <div className="flex items-center justify-center">
-            <Button size="lg" className="px-16">
-              Register
+            <Button size="lg" className="px-16" disabled={loading}>
+              {loading ? 'Loading...' : 'Register'}
             </Button>
           </div>
+          {error && <p className="text-vouusar mt-5">{error}</p>}
         </form>
       </div>
     </div>

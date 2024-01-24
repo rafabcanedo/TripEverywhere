@@ -3,3 +3,9 @@ export interface InputProps {
   type: string
   id: string
 }
+
+export interface UserState {
+  currentUser: null
+  error: null
+  loading: boolean
+}

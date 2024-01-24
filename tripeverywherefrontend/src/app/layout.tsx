@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Roboto_Flex as Roboto, Montserrat, Poppins } from 'next/font/google'
 import './globals.css'
 import { Header } from '@/components/Header'
+import { ReduxProvider } from '@/redux/provider'
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -33,8 +34,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body
         className={`${roboto.variable} ${montserrat.variable} ${poppins.variable} bg-background font-sans`}
       >
-        <Header />
-        {children}
+        <ReduxProvider>
+          <Header />
+          {children}
+        </ReduxProvider>
       </body>
     </html>
   )

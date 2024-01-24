@@ -1,24 +1,23 @@
 'use client'
 import * as React from 'react'
-import { Button } from '@/components/Button'
-import { Input } from '@/components/Input'
-import { useForm } from 'react-hook-form'
-import Link from 'next/link'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
-
-/* 
-const createUserSchema = z.object({
-  email: z.string().email('Formato de email invalido'),
-  password: z.string().min(6, 'O email precisa de no mínimo 6 caracteres'),
-})
-
-type CreateUserSchema = z.infer<typeof createUserSchema>
-*/
+import { useRouter } from 'next/navigation'
+import { Button } from '@/components/Button'
+import Link from 'next/link'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from '@/redux/user/userSlice'
+import { RootState } from '@/redux/store'
 
 export default function Login() {
   const [formData, setFormData] = useState({})
+  const { loading, error } = useSelector((state: RootState) => state.user)
+
+  const router = useRouter()
+  const dispatch = useDispatch()
 
   const handleCreateUser = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -27,8 +26,31 @@ export default function Login() {
     })
   }
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault()
+
+    try {
+      dispatch(signInStart())
+      const response = await fetch('http://localhost:3333/auth/login', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+      const data = await response.json()
+
+      console.log(data)
+
+      if (data.success === false) {
+        dispatch(signInFailure(data.message))
+        return
+      }
+      dispatch(signInSuccess(data))
+      router.push('/')
+    } catch (error: any) {
+      dispatch(signInFailure(error.message))
+    }
   }
 
   console.log(formData)
@@ -63,8 +85,8 @@ export default function Login() {
             </Link>
           </div>
           <div className="flex items-center justify-center">
-            <Button size="lg" className="px-16">
-              Login
+            <Button size="lg" className="px-16" disabled={loading}>
+              {loading ? 'Loading...' : 'Login'}
             </Button>
           </div>
           <div className="flex items-center justify-center">
