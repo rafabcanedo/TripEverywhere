@@ -11,6 +11,7 @@ import {
   signInFailure,
 } from '@/redux/user/userSlice'
 import { RootState } from '@/redux/store'
+import { OAuth } from '@/components/OAuth'
 
 export default function Login() {
   const [formData, setFormData] = useState({})
@@ -26,13 +27,13 @@ export default function Login() {
     })
   }
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     try {
       dispatch(signInStart())
       const response = await fetch('http://localhost:3333/auth/login', {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -89,13 +90,11 @@ export default function Login() {
               {loading ? 'Loading...' : 'Login'}
             </Button>
           </div>
-          <div className="flex items-center justify-center">
-            <Button className="bg-red-500 hover:bg-vouusar">
-              Continue with Google
-            </Button>
-          </div>
+          <OAuth />
         </form>
       </div>
     </div>
   )
 }
+
+// {error && <p className="text-vouusar mt-4">{error}</p>}

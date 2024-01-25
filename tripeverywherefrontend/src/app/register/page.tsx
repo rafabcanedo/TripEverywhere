@@ -19,12 +19,14 @@ export default function Register() {
     })
   }
 
+  // error no body da request
+
   const handleSubmit = async (e: any) => {
     e.preventDefault()
 
     try {
       setLoading(true)
-      const response = await fetch('http://localhost:3333/users', {
+      const response = await fetch('http://localhost:3333/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +62,7 @@ export default function Register() {
           className="flex flex-col items-center gap-4"
         >
           <input
-            id="username"
+            id="name"
             type="text"
             placeholder="Your name"
             className="border bg-slate-100 h-10 w-72 px-3 rounded-lg outline-none focus:border focus:border-primary"
