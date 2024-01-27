@@ -86,7 +86,12 @@ export default function Login() {
             </Link>
           </div>
           <div className="flex items-center justify-center">
-            <Button size="lg" className="px-16" disabled={loading}>
+            <Button
+              size="lg"
+              className="px-16"
+              type="submit"
+              disabled={loading}
+            >
               {loading ? 'Loading...' : 'Login'}
             </Button>
           </div>

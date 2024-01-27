@@ -2,7 +2,8 @@ import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 
 export class SignUpDto {
   @IsNotEmpty()
-  @IsString()
+  @IsString({ message: 'The name must 5 caracteres.' })
+  @MinLength(5)
   readonly name: string;
 
   @IsNotEmpty()

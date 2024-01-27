@@ -4,6 +4,7 @@ import { Roboto_Flex as Roboto, Montserrat, Poppins } from 'next/font/google'
 import './globals.css'
 import { Header } from '@/components/Header'
 import { ReduxProvider } from '@/redux/provider'
+import NextAuthSessionProvider from '@/providers/sessionProvider'
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -35,8 +36,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         className={`${roboto.variable} ${montserrat.variable} ${poppins.variable} bg-background font-sans`}
       >
         <ReduxProvider>
-          <Header />
-          {children}
+          <NextAuthSessionProvider>
+            <Header />
+            {children}
+          </NextAuthSessionProvider>
         </ReduxProvider>
       </body>
     </html>
