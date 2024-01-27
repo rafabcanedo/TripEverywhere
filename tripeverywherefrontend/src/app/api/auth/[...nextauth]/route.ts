@@ -35,8 +35,18 @@ const nextAuthOptions: NextAuthOptions = {
   pages: {
     signIn: '/login',
   },
+  callbacks: {
+    async jwt({ token, user }) {
+      user && (token.user = user)
+      return token
+    },
+    async session({ session, token }) {
+      session = token.user as any
+      return session
+    },
+  },
 }
 
 const handler = NextAuth(nextAuthOptions)
 
-export { handler as GET, handler as POST }
+export { handler as GET, handler as POST, nextAuthOptions }

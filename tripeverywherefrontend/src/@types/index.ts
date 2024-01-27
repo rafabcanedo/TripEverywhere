@@ -1,3 +1,5 @@
+import { ReactNode } from 'react'
+
 export interface InputProps {
   placeholder: string
   type: string
@@ -8,4 +10,8 @@ export interface UserState {
   currentUser: null
   error: null
   loading: boolean
+}
+
+export interface PrivateLayoutProps {
+  children: ReactNode
 }

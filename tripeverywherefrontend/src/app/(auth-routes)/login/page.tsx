@@ -12,8 +12,11 @@ import {
 } from '@/redux/user/userSlice'
 import { RootState } from '@/redux/store'
 import { OAuth } from '@/components/OAuth'
+import { signIn } from 'next-auth/react'
 
 export default function Login() {
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
   const [formData, setFormData] = useState({})
   const { loading, error } = useSelector((state: RootState) => state.user)
 
@@ -27,33 +30,21 @@ export default function Login() {
     })
   }
 
-  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
+    event?.preventDefault()
 
-    try {
-      dispatch(signInStart())
-      const response = await fetch('http://localhost:3333/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      })
-      const data = await response.json()
+    const result = await signIn('credentials', {
+      email,
+      password,
+      redirect: false,
+    })
 
-      console.log(data)
-
-      if (data.success === false) {
-        dispatch(signInFailure(data.message))
-        return
-      }
-      dispatch(signInSuccess(data))
-      router.push('/')
-    } catch (error: any) {
-      dispatch(signInFailure(error.message))
+    if (result?.error) {
+      console.log(result)
     }
-  }
 
+    router.replace('/profile')
+  }
   console.log(formData)
   return (
     <div className="flex min-h-screen w-full flex-wrap items-center justify-center p-2">
@@ -70,14 +61,14 @@ export default function Login() {
             type="email"
             placeholder="Email"
             className="border bg-slate-100 h-10 w-72 px-3 rounded-lg outline-none focus:border focus:border-primary"
-            onChange={handleCreateUser}
+            onChange={(event) => setEmail(event.target.value)}
           />
           <input
             id="password"
             type="password"
             placeholder="Password"
             className="border bg-slate-100 h-10 w-72 px-3 rounded-lg outline-none focus:border focus:border-primary"
-            onChange={handleCreateUser}
+            onChange={(event) => setPassword(event.target.value)}
           />
           <div className="flex flex-row justify-end mr-4">
             <span className="text-subtitle">Dont have an account?</span>
