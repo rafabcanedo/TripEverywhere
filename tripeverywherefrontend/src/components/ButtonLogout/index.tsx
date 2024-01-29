@@ -14,10 +14,10 @@ export default function ButtonLogout() {
 
   return (
     <button
-      className="h-8 px-4 bg-vouusar hover:bg-red-300 rounded font-pop"
+      className="h-6 px-8 text-white bg-vouusar hover:bg-red-300 rounded"
       onClick={handleLogout}
     >
-      Sair
+      Logout
     </button>
   )
 }
