@@ -39,7 +39,7 @@ export class UsersController {
     return this.usersService.findById(id);
   }
 
-  @Put(':id')
+  @Put('/update/:id')
   async updateUsers(
     @Param('id')
     id: string,

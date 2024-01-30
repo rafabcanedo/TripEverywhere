@@ -19,8 +19,6 @@ export default function Register() {
     })
   }
 
-  // error no body da request
-
   const handleSubmit = async (e: any) => {
     e.preventDefault()
 

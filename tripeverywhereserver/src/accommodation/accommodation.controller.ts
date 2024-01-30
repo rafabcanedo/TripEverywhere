@@ -7,12 +7,15 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { Query as ExpressQuery } from 'express-serve-static-core';
 import { Accommodation } from './schemas/accommodation.schema';
 import { CreateAccommodationDto } from './dto/create-accommodation.dto';
 import { UpdateAccommodationDto } from './dto/update-accommodation.dto';
 import { AccommodationService } from './accommodation.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('accommodation')
 export class AccommodationController {
@@ -24,11 +27,13 @@ export class AccommodationController {
   }
 
   @Post()
+  @UseGuards(AuthGuard())
   async createAccommodation(
     @Body()
     accommodation: CreateAccommodationDto,
+    @Req() req,
   ): Promise<Accommodation> {
-    return this.accommodationService.create(accommodation);
+    return this.accommodationService.create(accommodation, req.user);
   }
 
   @Get(':id')
